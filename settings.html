@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #333;
+            user-select: none;
+        }
+
+        body.dark {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .close-button {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            opacity: 0.5;
+            padding: 0;
+        }
+
+        .close-button:hover {
+            opacity: 1;
+        }
+
+        .close-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+
+        .close-icon::before,
+        .close-icon::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 2px;
+            background: currentColor;
+            top: 11px;
+            left: 4px;
+        }
+
+        .close-icon::before {
+            transform: rotate(45deg);
+        }
+
+        .close-icon::after {
+            transform: rotate(-45deg);
+        }
+
+        .settings-group {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .dark .settings-group {
+            background: #2d2d2d;
+        }
+
+        .settings-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .dark .settings-title {
+            color: #aaa;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .setting-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-label {
+            font-size: 14px;
+        }
+
+        select, input {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .dark select,
+        .dark input {
+            background: #1a1a1a;
+            border-color: #444;
+            color: #fff;
+        }
+
+        input[type="color"] {
+            width: 40px;
+            height: 30px;
+            padding: 0;
+            border: none;
+        }
+
+        .theme-preview {
+            width: 100%;
+            height: 40px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            box-sizing: border-box;
+            font-size: var(--preview-font-size);
+            font-family: var(--preview-font-family);
+        }
+
+        .save-button {
+            width: 100%;
+            padding: 10px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .save-button:hover {
+            background: #27ae60;
+        }
+
+        .dark .save-button {
+            background: #27ae60;
+        }
+
+        .dark .save-button:hover {
+            background: #219a52;
+        }
+
+        .size-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .size-option {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .size-option:hover {
+            background: #f0f0f0;
+        }
+
+        .size-option.active {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+
+        .dark .size-option {
+            border-color: #444;
+        }
+
+        .dark .size-option:hover {
+            background: #2d2d2d;
+        }
+
+        .dark .size-option.active {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.2);
+        }
+
+        .size-preview {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
+            border: 1px dashed #ddd;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .dark .size-preview {
+            border-color: #444;
+            color: #aaa;
+        }
+
+        .preview-box {
+            background: #f0f0f0;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .dark .preview-box {
+            background: #2d2d2d;
+            color: #aaa;
+        }
+
+        .color-options {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .color-option {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #2ecc71;
+        }
+
+        .dark .color-option.active {
+            border-color: #27ae60;
+        }
+
+        .color-option.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            font-size: 14px;
+        }
+
+        .color-group {
+            margin-bottom: 15px;
+        }
+
+        .color-group-title {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .dark .color-group-title {
+            color: #aaa;
+        }
+
+        .font-preview {
+            margin-top: 6px;
+            color: #666;
+            font-family: var(--preview-font-family, inherit);
+        }
+
+        .dark .font-preview {
+            color: #aaa;
+        }
+
+        .size-details {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .dark .size-details {
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Settings</div>
+        <button class="close-button">
+            <div class="close-icon"></div>
+        </button>
+    </div>
+
+    <div class="settings-group">
+        <div class="settings-title">Theme</div>
+        <div class="setting-item">
+            <div class="setting-label">Mode</div>
+            <select id="theme-mode">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="system">System</option>
+            </select>
+        </div>
+        
+        <div class="color-group">
+            <div class="color-group-title">Background Color</div>
+            <div class="color-options" id="bg-colors"></div>
+        </div>
+        
+        <div class="color-group">
+            <div class="color-group-title">Text Color</div>
+            <div class="color-options" id="text-colors"></div>
+        </div>
+
+        <div class="theme-preview" id="theme-preview">
+            <span>12.5 MB/s ↓</span>
+            <span style="margin-left: 12px">1.2 MB/s ↑</span>
+        </div>
+    </div>
+
+    <div class="settings-group">
+        <div class="settings-title">Font</div>
+        <div class="setting-item">
+            <div class="setting-label">Font Family</div>
+            <select id="font-family">
+                <option value="Arial">Arial</option>
+                <option value="Helvetica">Helvetica</option>
+                <option value="Segoe UI">Segoe UI</option>
+                <option value="Roboto">Roboto</option>
+                <option value="SF Pro">SF Pro</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="save-button">Save Changes</button>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const fs = require('fs');
+        const path = require('path');
+
+        // Default settings
+        let settings = {
+            theme: {
+                mode: 'light',
+                backgroundColor: '#FFFFFF',
+                textColor: '#333333'
+            },
+            font: {
+                family: 'Arial',
+                size: 12
+            }
+        };
+
+        const SETTINGS_FILE = path.join(__dirname, 'settings.json');
+
+        // Load settings
+        function loadSettings() {
+            try {
+                if (fs.existsSync(SETTINGS_FILE)) {
+                    const data = fs.readFileSync(SETTINGS_FILE, 'utf8');
+                    settings = JSON.parse(data);
+                    applySettings();
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        // Save settings
+        function saveSettings() {
+            try {
+                fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings));
+                ipcRenderer.send('settings-updated', settings);
+            } catch (error) {
+                console.error('Error saving settings:', error);
+            }
+        }
+
+        // Apply settings to preview
+        function applySettings() {
+            // Theme settings
+            document.getElementById('theme-mode').value = settings.theme.mode;
+            document.getElementById('bg-color').value = settings.theme.backgroundColor;
+            document.getElementById('text-color').value = settings.theme.textColor;
+            
+            // Font settings
+            document.getElementById('font-family').value = settings.font.family;
+            document.getElementById('font-size').value = settings.font.size;
+
+            // Update preview
+            const preview = document.getElementById('theme-preview');
+            preview.style.background = settings.theme.backgroundColor;
+            preview.style.color = settings.theme.textColor;
+            preview.style.setProperty('--preview-font-size', `${settings.font.size}px`);
+            preview.style.setProperty('--preview-font-family', settings.font.family);
+
+            // Update body theme
+            if (settings.theme.mode === 'dark') {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+
+            // Update size option font previews
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.style.setProperty('--preview-font-family', settings.font.family);
+            });
+        }
+
+        function updateSizePreview(width, height) {
+            const preview = document.querySelector('.preview-box');
+            preview.style.width = `${width * 0.4}px`;
+            preview.style.height = `${height * 0.4}px`;
+            preview.textContent = `${width}×${height}`;
+        }
+
+        // Renk paletleri
+        const colorPalettes = {
+            light: {
+                background: [
+                    { color: '#FFFFFF', name: 'White' },
+                    { color: '#F8F9FA', name: 'Gray 50' },
+                    { color: '#F1F3F5', name: 'Gray 100' },
+                    { color: '#E9ECEF', name: 'Gray 200' },
+                    { color: '#F5F5F5', name: 'Light Gray' },
+                    { color: '#FAFAFA', name: 'Off White' }
+                ],
+                text: [
+                    { color: '#212529', name: 'Gray 900' },
+                    { color: '#343A40', name: 'Gray 800' },
+                    { color: '#495057', name: 'Gray 700' },
+                    { color: '#333333', name: 'Dark Gray' },
+                    { color: '#444444', name: 'Charcoal' },
+                    { color: '#222222', name: 'Almost Black' }
+                ]
+            },
+            dark: {
+                background: [
+                    { color: '#1A1A1A', name: 'Dark' },
+                    { color: '#212121', name: 'Material Dark' },
+                    { color: '#2D2D2D', name: 'Charcoal' },
+                    { color: '#333333', name: 'Dark Gray' },
+                    { color: '#242424', name: 'Slate' },
+                    { color: '#1E1E1E', name: 'VS Code Dark' }
+                ],
+                text: [
+                    { color: '#FFFFFF', name: 'White' },
+                    { color: '#F8F9FA', name: 'Gray 50' },
+                    { color: '#E9ECEF', name: 'Gray 200' },
+                    { color: '#DEE2E6', name: 'Gray 300' },
+                    { color: '#CCCCCC', name: 'Light Gray' },
+                    { color: '#EEEEEE', name: 'Off White' }
+                ]
+            }
+        };
+
+        // Renk seçeneklerini oluştur
+        function createColorOptions() {
+            const mode = settings.theme.mode === 'system' 
+                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                : settings.theme.mode;
+            
+            const bgContainer = document.getElementById('bg-colors');
+            const textContainer = document.getElementById('text-colors');
+            
+            bgContainer.innerHTML = '';
+            textContainer.innerHTML = '';
+            
+            colorPalettes[mode].background.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'color-option' + (color.color === settings.theme.backgroundColor ? ' active' : '');
+                div.style.backgroundColor = color.color;
+                div.title = color.name;
+                div.dataset.color = color.color;
+                div.addEventListener('click', () => {
+                    settings.theme.backgroundColor = color.color;
+                    document.querySelectorAll('#bg-colors .color-option').forEach(opt => opt.classList.remove('active'));
+                    div.classList.add('active');
+                    applySettings();
+                });
+                bgContainer.appendChild(div);
+            });
+
+            colorPalettes[mode].text.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'color-option' + (color.color === settings.theme.textColor ? ' active' : '');
+                div.style.backgroundColor = color.color;
+                div.title = color.name;
+                div.dataset.color = color.color;
+                div.addEventListener('click', () => {
+                    settings.theme.textColor = color.color;
+                    document.querySelectorAll('#text-colors .color-option').forEach(opt => opt.classList.remove('active'));
+                    div.classList.add('active');
+                    applySettings();
+                });
+                textContainer.appendChild(div);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('theme-mode').addEventListener('change', (e) => {
+            settings.theme.mode = e.target.value;
+            createColorOptions(); // Renk paletini güncelle
+            applySettings();
+        });
+
+        document.getElementById('bg-color').addEventListener('input', (e) => {
+            settings.theme.backgroundColor = e.target.value;
+            applySettings();
+        });
+
+        document.getElementById('text-color').addEventListener('input', (e) => {
+            settings.theme.textColor = e.target.value;
+            applySettings();
+        });
+
+        document.getElementById('font-family').addEventListener('change', (e) => {
+            settings.font.family = e.target.value;
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.style.setProperty('--preview-font-family', e.target.value);
+            });
+            applySettings();
+        });
+
+        document.getElementById('font-size').addEventListener('input', (e) => {
+            settings.font.size = parseInt(e.target.value);
+            applySettings();
+        });
+
+        document.querySelector('.save-button').addEventListener('click', () => {
+            saveSettings();
+        });
+
+        document.querySelector('.close-button').addEventListener('click', () => {
+            ipcRenderer.send('close-settings');
+        });
+
+        // Initialize
+        loadSettings();
+        createColorOptions();
+
+        // System teması değişikliğini dinle
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (settings.theme.mode === 'system') {
+                createColorOptions();
+                applySettings();
+            }
+        });
+    </script>
+</body>
+</html> 

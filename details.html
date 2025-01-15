@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Network Usage Details</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #333;
+            user-select: none;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-button, .close-button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .settings-button:hover, .close-button:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .settings-button:hover, .dark .close-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-button svg, .close-button svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .download {
+            color: #2ecc71;
+        }
+
+        .upload {
+            color: #e74c3c;
+        }
+
+        .close-button {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            opacity: 0.5;
+            padding: 0;
+        }
+
+        .close-button:hover {
+            opacity: 1;
+        }
+
+        .close-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+
+        .close-icon::before,
+        .close-icon::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 2px;
+            background: #666;
+            top: 11px;
+            left: 4px;
+        }
+
+        .close-icon::before {
+            transform: rotate(45deg);
+        }
+
+        .close-icon::after {
+            transform: rotate(-45deg);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-radius: 4px;
+        }
+
+        .tab.active {
+            background: #f0f0f0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="title">Network Usage Statistics</div>
+        </div>
+        <div class="header-actions">
+            <button class="settings-button" title="Settings">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+                </svg>
+            </button>
+            <button class="close-button">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-title">Today's Download</div>
+            <div class="stat-value download" id="today-download">0 MB</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Today's Upload</div>
+            <div class="stat-value upload" id="today-upload">0 MB</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Total Usage Today</div>
+            <div class="stat-value" id="today-total">0 MB</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-period="daily">Daily</button>
+        <button class="tab" data-period="weekly">Weekly</button>
+        <button class="tab" data-period="monthly">Monthly</button>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="usage-chart"></canvas>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const si = require('systeminformation');
+        const fs = require('fs');
+        const path = require('path');
+        const Chart = require('chart.js/auto');
+
+        // Data storage
+        let usageData = {
+            daily: {},
+            weekly: {},
+            monthly: {}
+        };
+
+        const DATA_FILE = path.join(__dirname, 'usage_data.json');
+
+        // Load saved data
+        function loadData() {
+            try {
+                if (fs.existsSync(DATA_FILE)) {
+                    const data = fs.readFileSync(DATA_FILE, 'utf8');
+                    usageData = JSON.parse(data);
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Save data
+        function saveData() {
+            try {
+                fs.writeFileSync(DATA_FILE, JSON.stringify(usageData));
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+        }
+
+        function formatBytes(bytes) {
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            if (bytes === 0) return '0 MB';
+            const i = Math.floor(Math.log(bytes) / Math.log(1024));
+            return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
+        }
+
+        let chart = null;
+
+        function updateChart(period) {
+            const ctx = document.getElementById('usage-chart').getContext('2d');
+            const data = usageData[period];
+            const labels = Object.keys(data).slice(-30);
+            const downloadData = labels.map(date => data[date]?.download || 0);
+            const uploadData = labels.map(date => data[date]?.upload || 0);
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: 'Download',
+                            data: downloadData,
+                            borderColor: '#2ecc71',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Upload',
+                            data: uploadData,
+                            borderColor: '#e74c3c',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => formatBytes(value)
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        let lastStats = null;
+        let currentPeriod = 'daily';
+
+        async function updateStats() {
+            try {
+                const stats = await si.networkStats();
+                const now = new Date();
+                const today = now.toISOString().split('T')[0];
+
+                if (lastStats) {
+                    const downloaded = stats[0].rx_bytes - lastStats.rx_bytes;
+                    const uploaded = stats[0].tx_bytes - lastStats.tx_bytes;
+
+                    // Update daily stats
+                    if (!usageData.daily[today]) {
+                        usageData.daily[today] = { download: 0, upload: 0 };
+                    }
+                    usageData.daily[today].download += downloaded;
+                    usageData.daily[today].upload += uploaded;
+
+                    // Update UI
+                    document.getElementById('today-download').textContent = formatBytes(usageData.daily[today].download);
+                    document.getElementById('today-upload').textContent = formatBytes(usageData.daily[today].upload);
+                    document.getElementById('today-total').textContent = formatBytes(usageData.daily[today].download + usageData.daily[today].upload);
+
+                    // Update chart
+                    updateChart(currentPeriod);
+
+                    // Save data
+                    saveData();
+                }
+
+                lastStats = {
+                    rx_bytes: stats[0].rx_bytes,
+                    tx_bytes: stats[0].tx_bytes
+                };
+            } catch (error) {
+                console.error('Error updating stats:', error);
+            }
+        }
+
+        // Tab handling
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentPeriod = tab.dataset.period;
+                updateChart(currentPeriod);
+            });
+        });
+
+        // Close button handler
+        document.querySelector('.close-button').addEventListener('click', () => {
+            ipcRenderer.send('close-details');
+        });
+
+        // Show settings window on button click
+        document.querySelector('.settings-button').addEventListener('click', () => {
+            ipcRenderer.send('show-settings');
+        });
+
+        // Initialize
+        loadData();
+        updateStats();
+        setInterval(updateStats, 1000);
+    </script>
+</body>
+</html> 

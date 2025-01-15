@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Network Speed Widget</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 8px;
+            background: transparent;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            -webkit-app-region: no-drag;
+        }
+
+        #container {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        #drag-handle {
+            width: 10px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+            -webkit-app-region: drag;
+            margin-left: -2px;
+        }
+
+        #drag-handle:active {
+            cursor: grabbing;
+        }
+
+        #drag-handle svg {
+            width: 8px;
+            height: 8px;
+            fill: #666;
+        }
+
+        #widget:hover #drag-handle {
+            opacity: 0.6;
+        }
+
+        #drag-handle:hover {
+            opacity: 0.8 !important;
+        }
+
+        #widget {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: auto;
+        }
+
+        #widget:hover {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .speed-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .speed-item img {
+            width: 10px;
+            height: 10px;
+        }
+
+        .speed-value {
+            text-align: right;
+            min-width: 40px;
+        }
+
+        .speed-content {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="widget">
+            <div id="drag-handle" title="Drag to move">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="4" r="2"/>
+                    <circle cx="12" cy="12" r="2"/>
+                    <circle cx="12" cy="20" r="2"/>
+                </svg>
+            </div>
+            <div class="speed-content">
+                <div class="speed-item">
+                    <img src="icons/download.png" alt="↓">
+                    <span id="download" class="speed-value">0K/s</span>
+                </div>
+                <div class="speed-item">
+                    <img src="icons/upload.png" alt="↑">
+                    <span id="upload" class="speed-value">0K/s</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        
+        // Update network speeds
+        ipcRenderer.on('network-speed', (event, data) => {
+            document.getElementById('download').textContent = `${data.download}/s`;
+            document.getElementById('upload').textContent = `${data.upload}/s`;
+        });
+
+        // Show details window on double click
+        document.getElementById('widget').addEventListener('dblclick', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            ipcRenderer.send('show-details');
+        });
+
+        // Apply settings when they change
+        ipcRenderer.on('apply-settings', (event, settings) => {
+            document.body.style.fontFamily = settings.font.family;
+            document.body.style.fontSize = `${settings.font.size}px`;
+            
+            const widget = document.getElementById('widget');
+            widget.style.background = settings.theme.backgroundColor;
+            widget.style.color = settings.theme.textColor;
+
+            // Update drag handle color based on theme
+            const dragHandle = document.getElementById('drag-handle');
+            dragHandle.querySelector('svg').style.fill = settings.theme.textColor;
+        });
+    </script>
+</body>
+</html> 
