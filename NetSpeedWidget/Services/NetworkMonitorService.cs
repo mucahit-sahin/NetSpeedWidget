@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Microsoft.Diagnostics.Tracing.Session;
 using NetSpeedWidget.Models;
 
@@ -96,13 +97,29 @@ namespace NetSpeedWidget.Services
                                 var currentStats = new Dictionary<int, NetworkUsageInfo>();
                                 foreach (var kvp in _processStats)
                                 {
-                                    currentStats[kvp.Key] = new NetworkUsageInfo
+                                    var info = new NetworkUsageInfo
                                     {
                                         ProcessId = kvp.Key,
                                         ProcessName = kvp.Value.ProcessName,
                                         DownloadBytesPerSecond = kvp.Value.DownloadBytesPerSecond,
                                         UploadBytesPerSecond = kvp.Value.UploadBytesPerSecond
                                     };
+
+                                    // Cache the process ID for icon loading
+                                    var processId = kvp.Key;
+                                    Application.Current.Dispatcher.BeginInvoke(() =>
+                                    {
+                                        try
+                                        {
+                                            info.Icon = NetworkUsageInfo.GetIconFromProcess(processId);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Debug.WriteLine($"Error loading icon for process {processId}: {ex.Message}");
+                                        }
+                                    });
+
+                                    currentStats[kvp.Key] = info;
                                 }
 
                                 StatsUpdated?.Invoke(this, currentStats);

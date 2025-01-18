@@ -67,16 +67,31 @@
                     <DataTemplate>
                         <Grid Margin="0,5">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding ProcessName}"
+                            
+                            <!-- Process Icon -->
+                            <Image Grid.Column="0"
+                                   Source="{Binding Icon}"
+                                   Width="16"
+                                   Height="16"
+                                   Margin="0,0,8,0"
+                                   VerticalAlignment="Center"
+                                   RenderOptions.BitmapScalingMode="HighQuality"/>
+                            
+                            <!-- Process Name -->
+                            <TextBlock Grid.Column="1"
+                                     Text="{Binding ProcessName}"
                                      Foreground="#E0E0E0"
                                      FontSize="12"
                                      FontFamily="{StaticResource MainFont}"
                                      VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1"
+                            
+                            <!-- Download Speed -->
+                            <TextBlock Grid.Column="2"
                                      Foreground="#4CAF50"
                                      FontSize="12"
                                      FontWeight="SemiBold"
@@ -86,7 +101,9 @@
                                 <Run Text="↓"/>
                                 <Run Text="{Binding DownloadSpeedFormatted, Mode=OneWay}"/>
                             </TextBlock>
-                            <TextBlock Grid.Column="2"
+                            
+                            <!-- Upload Speed -->
+                            <TextBlock Grid.Column="3"
                                      Foreground="#FF9800"
                                      FontSize="12"
                                      FontWeight="SemiBold"

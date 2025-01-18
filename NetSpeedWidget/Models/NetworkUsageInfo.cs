@@ -1,4 +1,8 @@
 using System;
+using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.Windows.Interop;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace NetSpeedWidget.Models
@@ -10,6 +14,9 @@ namespace NetSpeedWidget.Models
 
         [ObservableProperty]
         private int _processId;
+
+        [ObservableProperty]
+        private BitmapSource? _icon;
 
         private double _downloadBytesPerSecond;
         public double DownloadBytesPerSecond
@@ -56,5 +63,41 @@ namespace NetSpeedWidget.Models
             else
                 return $"{speed:F0}B/s";
         }
+
+        public static BitmapSource? GetIconFromProcess(int processId)
+        {
+            try
+            {
+                using var process = System.Diagnostics.Process.GetProcessById(processId);
+                string? fileName = process.MainModule?.FileName;
+                if (string.IsNullOrEmpty(fileName)) return null;
+
+                using var icon = System.Drawing.Icon.ExtractAssociatedIcon(fileName);
+                if (icon == null) return null;
+
+                using var bitmap = icon.ToBitmap();
+                var handle = bitmap.GetHbitmap();
+                try
+                {
+                    return Imaging.CreateBitmapSourceFromHBitmap(
+                        handle,
+                        IntPtr.Zero,
+                        Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions());
+                }
+                finally
+                {
+                    DeleteObject(handle);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting icon for process {processId}: {ex.Message}");
+                return null;
+            }
+        }
+
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        private static extern bool DeleteObject(IntPtr hObject);
     }
 }
