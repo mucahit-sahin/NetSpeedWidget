@@ -7,7 +7,9 @@ using System.Windows.Media;
 using NetSpeedWidget.ViewModels;
 using NetSpeedWidget.Services;
 using System.Diagnostics;
+using System.IO;
 using MessageBox = System.Windows.MessageBox;
+using Icon = System.Drawing.Icon;
 
 namespace NetSpeedWidget.Views
 {
@@ -15,7 +17,7 @@ namespace NetSpeedWidget.Views
     {
         private readonly NotifyIcon _notifyIcon;
         private readonly MainViewModel _viewModel;
-        private NetworkUsageViewModel _networkUsageViewModel;
+        private NetworkUsageViewModel? _networkUsageViewModel;
 
         public MainWindow()
         {
@@ -32,9 +34,12 @@ namespace NetSpeedWidget.Views
                 Debug.WriteLine("ViewModel initialized");
 
                 // Initialize system tray icon
+                var iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "assets", "image.ico");
+                Debug.WriteLine($"Loading icon from: {iconPath}");
+
                 _notifyIcon = new NotifyIcon
                 {
-                    Icon = SystemIcons.Application,
+                    Icon = new Icon(iconPath),
                     Visible = true,
                     Text = "Network Speed Widget"
                 };
