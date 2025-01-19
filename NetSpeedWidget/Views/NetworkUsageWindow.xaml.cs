@@ -6,12 +6,14 @@ using NetSpeedWidget.ViewModels;
 using NetSpeedWidget.Services;
 using NetSpeedWidget.Views;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace NetSpeedWidget.Views
 {
     public partial class NetworkUsageWindow : Window
     {
         private NetworkUsageViewModel? _viewModel;
+        private readonly Dictionary<int, AppDetailsWindow> _openDetailWindows = new();
 
         public NetworkUsageWindow()
         {
@@ -61,9 +63,28 @@ namespace NetSpeedWidget.Views
 
                     if (_viewModel?.NetworkMonitorService != null)
                     {
+                        // Check if window already exists for this process
+                        if (_openDetailWindows.TryGetValue(selectedApp.ProcessId, out var existingWindow))
+                        {
+                            Debug.WriteLine($"Window already exists for process {selectedApp.ProcessId}");
+                            existingWindow.Activate(); // Bring existing window to front
+                            return;
+                        }
+
                         Debug.WriteLine("NetworkMonitorService is available");
                         var detailsWindow = new AppDetailsWindow(selectedApp, _viewModel.NetworkMonitorService);
                         detailsWindow.Owner = Application.Current.MainWindow;
+
+                        // Add to tracking dictionary
+                        _openDetailWindows[selectedApp.ProcessId] = detailsWindow;
+
+                        // Remove from tracking when closed
+                        detailsWindow.Closed += (s, args) =>
+                        {
+                            _openDetailWindows.Remove(selectedApp.ProcessId);
+                            Debug.WriteLine($"Removed window tracking for process {selectedApp.ProcessId}");
+                        };
+
                         detailsWindow.Show();
                         Debug.WriteLine("AppDetailsWindow shown");
                     }

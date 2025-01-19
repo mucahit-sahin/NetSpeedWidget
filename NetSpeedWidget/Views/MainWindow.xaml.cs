@@ -18,6 +18,7 @@ namespace NetSpeedWidget.Views
         private readonly NotifyIcon _notifyIcon;
         private readonly MainViewModel _viewModel;
         private NetworkUsageViewModel? _networkUsageViewModel;
+        private NetworkUsageWindow? _networkUsageWindow;
 
         public MainWindow()
         {
@@ -116,17 +117,34 @@ namespace NetSpeedWidget.Views
         {
             try
             {
+                // If window exists, just activate it
+                if (_networkUsageWindow != null)
+                {
+                    _networkUsageWindow.Activate();
+                    Debug.WriteLine("Existing NetworkUsageWindow activated");
+                    return;
+                }
+
                 // Create NetworkUsageViewModel with a new NetworkMonitorService
                 var monitorService = new NetworkMonitorService();
                 _networkUsageViewModel = new NetworkUsageViewModel(monitorService);
                 Debug.WriteLine("Created new NetworkUsageViewModel with NetworkMonitorService");
 
-                var usageWindow = new NetworkUsageWindow();
-                usageWindow.Owner = this;
-                usageWindow.DataContext = _networkUsageViewModel;
+                _networkUsageWindow = new NetworkUsageWindow();
+                _networkUsageWindow.Owner = this;
+                _networkUsageWindow.DataContext = _networkUsageViewModel;
                 Debug.WriteLine("Set NetworkUsageWindow DataContext");
 
-                usageWindow.Show();
+                // Clear the reference when the window is closed
+                _networkUsageWindow.Closed += (s, e) =>
+                {
+                    _networkUsageWindow = null;
+                    _networkUsageViewModel?.Dispose();
+                    _networkUsageViewModel = null;
+                    Debug.WriteLine("NetworkUsageWindow reference and ViewModel cleared");
+                };
+
+                _networkUsageWindow.Show();
             }
             catch (Exception ex)
             {
