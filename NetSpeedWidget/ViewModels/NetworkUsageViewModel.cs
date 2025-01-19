@@ -13,15 +13,30 @@ namespace NetSpeedWidget.ViewModels
     {
         private readonly NetworkMonitorService _networkMonitor;
         private readonly Dispatcher _dispatcher;
+        private readonly bool _ownsMonitorService;
 
         [ObservableProperty]
         private ObservableCollection<NetworkUsageInfo> _networkUsages = new();
 
-        public NetworkUsageViewModel()
+        public NetworkMonitorService NetworkMonitorService => _networkMonitor;
+
+        public NetworkUsageViewModel(NetworkMonitorService? existingMonitorService = null)
         {
             _dispatcher = Dispatcher.CurrentDispatcher;
-            _networkMonitor = new NetworkMonitorService();
+
+            if (existingMonitorService != null)
+            {
+                _networkMonitor = existingMonitorService;
+                _ownsMonitorService = false;
+            }
+            else
+            {
+                _networkMonitor = new NetworkMonitorService();
+                _ownsMonitorService = true;
+            }
+
             _networkMonitor.StatsUpdated += NetworkMonitor_StatsUpdated;
+            Debug.WriteLine("NetworkUsageViewModel initialized with monitor service");
         }
 
         private void NetworkMonitor_StatsUpdated(object? sender, System.Collections.Generic.Dictionary<int, NetworkUsageInfo> stats)
@@ -51,7 +66,10 @@ namespace NetSpeedWidget.ViewModels
 
         public void Dispose()
         {
-            _networkMonitor.Dispose();
+            if (_ownsMonitorService)
+            {
+                _networkMonitor.Dispose();
+            }
         }
     }
 }

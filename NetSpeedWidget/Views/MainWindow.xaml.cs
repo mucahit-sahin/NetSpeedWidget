@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Input;
 using System.Windows.Media;
 using NetSpeedWidget.ViewModels;
+using NetSpeedWidget.Services;
 using System.Diagnostics;
 using MessageBox = System.Windows.MessageBox;
 
@@ -14,6 +15,7 @@ namespace NetSpeedWidget.Views
     {
         private readonly NotifyIcon _notifyIcon;
         private readonly MainViewModel _viewModel;
+        private NetworkUsageViewModel _networkUsageViewModel;
 
         public MainWindow()
         {
@@ -107,12 +109,25 @@ namespace NetSpeedWidget.Views
 
         private void ShowNetworkUsageWindow()
         {
-            var usageWindow = new NetworkUsageWindow
+            try
             {
-                Owner = this,
-                DataContext = new NetworkUsageViewModel()
-            };
-            usageWindow.Show();
+                // Create NetworkUsageViewModel with a new NetworkMonitorService
+                var monitorService = new NetworkMonitorService();
+                _networkUsageViewModel = new NetworkUsageViewModel(monitorService);
+                Debug.WriteLine("Created new NetworkUsageViewModel with NetworkMonitorService");
+
+                var usageWindow = new NetworkUsageWindow();
+                usageWindow.Owner = this;
+                usageWindow.DataContext = _networkUsageViewModel;
+                Debug.WriteLine("Set NetworkUsageWindow DataContext");
+
+                usageWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error showing NetworkUsageWindow: {ex.Message}");
+                MessageBox.Show($"Error showing network usage window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -138,6 +153,7 @@ namespace NetSpeedWidget.Views
         {
             try
             {
+                _networkUsageViewModel?.Dispose();
                 if (_notifyIcon != null)
                 {
                     _notifyIcon.Visible = false;

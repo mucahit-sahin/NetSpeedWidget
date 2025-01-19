@@ -60,9 +60,12 @@
 
             <!-- Applications List -->
             <ListView Grid.Row="1" 
+                      Name="ApplicationsListView"
                       Background="Transparent"
                       BorderThickness="0"
-                      ItemsSource="{Binding NetworkUsages}">
+                      ItemsSource="{Binding NetworkUsages}"
+                      MouseDoubleClick="ListView_MouseDoubleClick"
+                      SelectionMode="Single">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="0,5">
