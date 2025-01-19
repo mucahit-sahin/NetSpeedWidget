@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  
+  <!-- App Title -->
+  <data name="AppTitle" xml:space="preserve">
+    <value>网络速度小工具</value>
+  </data>
+  <data name="NetworkUsage" xml:space="preserve">
+    <value>网络使用情况</value>
+  </data>
+
+  <!-- Settings Window -->
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="StartWithWindows" xml:space="preserve">
+    <value>开机自启动</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+
+  <!-- System Tray -->
+  <data name="Show" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+
+  <!-- Messages -->
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>语言已更改</value>
+  </data>
+  <data name="RestartRequired" xml:space="preserve">
+    <value>语言设置将在应用程序重启后完全生效。</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="RegistryAccessError" xml:space="preserve">
+    <value>访问注册表失败。</value>
+  </data>
+  <data name="StartupError" xml:space="preserve">
+    <value>更新启动设置失败：{0}</value>
+  </data>
+  <data name="LanguageError" xml:space="preserve">
+    <value>应用语言失败：{0}</value>
+  </data>
+  <data name="SaveLanguageError" xml:space="preserve">
+    <value>保存语言设置失败：{0}</value>
+  </data>
+</root> 

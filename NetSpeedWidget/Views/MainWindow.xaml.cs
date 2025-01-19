@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using NetSpeedWidget.ViewModels;
 using NetSpeedWidget.Services;
+using NetSpeedWidget.Views;
 using System.Diagnostics;
 using System.IO;
 using MessageBox = System.Windows.MessageBox;
@@ -19,6 +20,7 @@ namespace NetSpeedWidget.Views
         private readonly MainViewModel _viewModel;
         private NetworkUsageViewModel? _networkUsageViewModel;
         private NetworkUsageWindow? _networkUsageWindow;
+        private SettingsWindow? _settingsWindow;
 
         public MainWindow()
         {
@@ -163,6 +165,37 @@ namespace NetSpeedWidget.Views
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error hiding window: {ex.Message}");
+            }
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // If window exists, just activate it
+                if (_settingsWindow != null)
+                {
+                    _settingsWindow.Activate();
+                    Debug.WriteLine("Existing SettingsWindow activated");
+                    return;
+                }
+
+                _settingsWindow = new SettingsWindow();
+                _settingsWindow.Owner = this;
+
+                // Clear the reference when the window is closed
+                _settingsWindow.Closed += (s, args) =>
+                {
+                    _settingsWindow = null;
+                    Debug.WriteLine("SettingsWindow reference cleared");
+                };
+
+                _settingsWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error showing SettingsWindow: {ex.Message}");
+                MessageBox.Show($"Error showing settings window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

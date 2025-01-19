@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  
+  <!-- App Title -->
+  <data name="AppTitle" xml:space="preserve">
+    <value>ネットワーク速度ウィジェット</value>
+  </data>
+  <data name="NetworkUsage" xml:space="preserve">
+    <value>ネットワーク使用量</value>
+  </data>
+
+  <!-- Settings Window -->
+  <data name="Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="StartWithWindows" xml:space="preserve">
+    <value>Windowsと共に起動</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+
+  <!-- System Tray -->
+  <data name="Show" xml:space="preserve">
+    <value>表示</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>終了</value>
+  </data>
+
+  <!-- Messages -->
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>言語が変更されました</value>
+  </data>
+  <data name="RestartRequired" xml:space="preserve">
+    <value>言語設定はアプリケーションの再起動後に完全に適用されます。</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="RegistryAccessError" xml:space="preserve">
+    <value>レジストリへのアクセスに失敗しました。</value>
+  </data>
+  <data name="StartupError" xml:space="preserve">
+    <value>起動設定の更新に失敗しました：{0}</value>
+  </data>
+  <data name="LanguageError" xml:space="preserve">
+    <value>言語の適用に失敗しました：{0}</value>
+  </data>
+  <data name="SaveLanguageError" xml:space="preserve">
+    <value>言語設定の保存に失敗しました：{0}</value>
+  </data>
+</root> 

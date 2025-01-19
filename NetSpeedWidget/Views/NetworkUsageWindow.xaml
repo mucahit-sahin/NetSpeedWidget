@@ -5,8 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:NetSpeedWidget.ViewModels"
+        xmlns:resources="clr-namespace:NetSpeedWidget.Resources"
         mc:Ignorable="d"
-        Title="Network Usage" 
+        Title="{x:Static resources:Strings.NetworkUsage}" 
         Height="400" 
         Width="300"
         WindowStartupLocation="CenterScreen"
@@ -39,7 +40,7 @@
 
             <!-- Header -->
             <Grid Grid.Row="0" Margin="0,0,0,10">
-                <TextBlock Text="Network Usage"
+                <TextBlock Text="{x:Static resources:Strings.NetworkUsage}"
                          Foreground="#E0E0E0"
                          FontSize="16"
                          FontWeight="SemiBold"

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  
+  <!-- App Title -->
+  <data name="AppTitle" xml:space="preserve">
+    <value>Widget de Vitesse Réseau</value>
+  </data>
+  <data name="NetworkUsage" xml:space="preserve">
+    <value>Utilisation Réseau</value>
+  </data>
+
+  <!-- Settings Window -->
+  <data name="Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="StartWithWindows" xml:space="preserve">
+    <value>Démarrer avec Windows</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+
+  <!-- System Tray -->
+  <data name="Show" xml:space="preserve">
+    <value>Afficher</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+
+  <!-- Messages -->
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>Langue Modifiée</value>
+  </data>
+  <data name="RestartRequired" xml:space="preserve">
+    <value>Le paramètre de langue sera entièrement appliqué après le redémarrage de l'application.</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="RegistryAccessError" xml:space="preserve">
+    <value>Échec d'accès au registre.</value>
+  </data>
+  <data name="StartupError" xml:space="preserve">
+    <value>Échec de la mise à jour des paramètres de démarrage : {0}</value>
+  </data>
+  <data name="LanguageError" xml:space="preserve">
+    <value>Échec de l'application de la langue : {0}</value>
+  </data>
+  <data name="SaveLanguageError" xml:space="preserve">
+    <value>Échec de l'enregistrement du paramètre de langue : {0}</value>
+  </data>
+</root> 
