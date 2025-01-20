@@ -67,4 +67,19 @@
   <data name="SaveLanguageError" xml:space="preserve">
     <value>Error al guardar la configuración del idioma: {0}</value>
   </data>
+  <data name="TotalDownload" xml:space="preserve">
+    <value>Descarga Total: </value>
+  </data>
+  <data name="TotalUpload" xml:space="preserve">
+    <value>Subida Total: </value>
+  </data>
+  <data name="DownloadSpeed" xml:space="preserve">
+    <value>Velocidad de Descarga (MB/s)</value>
+  </data>
+  <data name="UploadSpeed" xml:space="preserve">
+    <value>Velocidad de Subida (MB/s)</value>
+  </data>
+  <data name="ApplicationUsage" xml:space="preserve">
+    <value>Uso por Aplicación</value>
+  </data>
 </root> 

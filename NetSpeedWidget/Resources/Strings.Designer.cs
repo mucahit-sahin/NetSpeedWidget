@@ -194,5 +194,60 @@ namespace NetSpeedWidget.Resources
                 return ResourceManager.GetString("NetworkUsage", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Total Download: benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string TotalDownload
+        {
+            get
+            {
+                return ResourceManager.GetString("TotalDownload", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Total Upload: benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string TotalUpload
+        {
+            get
+            {
+                return ResourceManager.GetString("TotalUpload", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Download Speed (MB/s) benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string DownloadSpeed
+        {
+            get
+            {
+                return ResourceManager.GetString("DownloadSpeed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Upload Speed (MB/s) benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string UploadSpeed
+        {
+            get
+            {
+                return ResourceManager.GetString("UploadSpeed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Application Usage benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string ApplicationUsage
+        {
+            get
+            {
+                return ResourceManager.GetString("ApplicationUsage", resourceCulture);
+            }
+        }
     }
 }

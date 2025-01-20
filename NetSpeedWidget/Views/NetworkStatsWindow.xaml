@@ -486,26 +486,28 @@
 
                         <!-- Total Download -->
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <TextBlock Text="Total Download: "
+                            <TextBlock Text="{x:Static resources:Strings.TotalDownload}"
                                      Foreground="#E0E0E0"
-                                     FontSize="12"
-                                     FontFamily="{StaticResource MainFont}"/>
+                                     FontSize="14"
+                                     FontFamily="{StaticResource MainFont}"
+                                     Margin="0,0,0,5"/>
                             <TextBlock Text="{Binding TotalDownload}"
                                      Foreground="#4CAF50"
-                                     FontSize="12"
+                                     FontSize="14"
                                      FontWeight="SemiBold"
                                      FontFamily="{StaticResource MainFont}"/>
                         </StackPanel>
 
                         <!-- Total Upload -->
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                            <TextBlock Text="Total Upload: "
+                            <TextBlock Text="{x:Static resources:Strings.TotalUpload}"
                                      Foreground="#E0E0E0"
-                                     FontSize="12"
-                                     FontFamily="{StaticResource MainFont}"/>
+                                     FontSize="14"
+                                     FontFamily="{StaticResource MainFont}"
+                                     Margin="0,0,0,5"/>
                             <TextBlock Text="{Binding TotalUpload}"
                                      Foreground="#FF9800"
-                                     FontSize="12"
+                                     FontSize="14"
                                      FontWeight="SemiBold"
                                      FontFamily="{StaticResource MainFont}"/>
                         </StackPanel>
@@ -513,7 +515,9 @@
 
                     <!-- Download Chart -->
                     <Border Grid.Row="2" 
-                            Background="#333333" 
+                            Background="#333333"
+                            Padding="15"
+                            Height="300"
                             CornerRadius="8">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -521,12 +525,11 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="Download Speed (MB/s)"
-                                     Foreground="#4CAF50"
+                            <TextBlock Text="{x:Static resources:Strings.DownloadSpeed}"
+                                     Foreground="#E0E0E0"
                                      FontSize="14"
-                                     FontWeight="SemiBold"
                                      FontFamily="{StaticResource MainFont}"
-                                     Margin="10,10,0,0"/>
+                                     Margin="0,0,0,5"/>
 
                             <lvc:CartesianChart Grid.Row="1"
                                               Series="{Binding DownloadSeries}"
@@ -541,7 +544,9 @@
 
                     <!-- Upload Chart -->
                     <Border Grid.Row="4" 
-                            Background="#333333" 
+                            Background="#333333"
+                            Padding="15"
+                            Height="300"
                             CornerRadius="8">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -549,12 +554,11 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="Upload Speed (MB/s)"
-                                     Foreground="#FF9800"
+                            <TextBlock Text="{x:Static resources:Strings.UploadSpeed}"
+                                     Foreground="#E0E0E0"
                                      FontSize="14"
-                                     FontWeight="SemiBold"
                                      FontFamily="{StaticResource MainFont}"
-                                     Margin="10,10,0,0"/>
+                                     Margin="0,0,0,5"/>
 
                             <lvc:CartesianChart Grid.Row="1"
                                               Series="{Binding UploadSeries}"
@@ -571,6 +575,7 @@
                     <Border Grid.Row="6" 
                             Background="#333333" 
                             CornerRadius="8"
+                            Padding="15"
                             MinHeight="200">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -578,12 +583,11 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="Application Usage"
+                            <TextBlock Text="{x:Static resources:Strings.ApplicationUsage}"
                                      Foreground="#E0E0E0"
                                      FontSize="14"
-                                     FontWeight="SemiBold"
                                      FontFamily="{StaticResource MainFont}"
-                                     Margin="10,10,0,10"/>
+                                     Margin="0,0,0,5"/>
 
                             <ListView Grid.Row="1"
                                      Background="Transparent"

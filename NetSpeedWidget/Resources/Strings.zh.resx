@@ -67,4 +67,19 @@
   <data name="SaveLanguageError" xml:space="preserve">
     <value>保存语言设置失败：{0}</value>
   </data>
+  <data name="TotalDownload" xml:space="preserve">
+    <value>总下载量: </value>
+  </data>
+  <data name="TotalUpload" xml:space="preserve">
+    <value>总上传量: </value>
+  </data>
+  <data name="DownloadSpeed" xml:space="preserve">
+    <value>下载速度 (MB/s)</value>
+  </data>
+  <data name="UploadSpeed" xml:space="preserve">
+    <value>上传速度 (MB/s)</value>
+  </data>
+  <data name="ApplicationUsage" xml:space="preserve">
+    <value>应用程序使用情况</value>
+  </data>
 </root> 

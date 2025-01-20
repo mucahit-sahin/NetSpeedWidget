@@ -67,4 +67,19 @@
   <data name="SaveLanguageError" xml:space="preserve">
     <value>언어 설정 저장 실패: {0}</value>
   </data>
+  <data name="TotalDownload" xml:space="preserve">
+    <value>총 다운로드: </value>
+  </data>
+  <data name="TotalUpload" xml:space="preserve">
+    <value>총 업로드: </value>
+  </data>
+  <data name="DownloadSpeed" xml:space="preserve">
+    <value>다운로드 속도 (MB/s)</value>
+  </data>
+  <data name="UploadSpeed" xml:space="preserve">
+    <value>업로드 속도 (MB/s)</value>
+  </data>
+  <data name="ApplicationUsage" xml:space="preserve">
+    <value>애플리케이션 사용량</value>
+  </data>
 </root> 
