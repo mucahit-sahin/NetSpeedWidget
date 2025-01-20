@@ -16,11 +16,15 @@ namespace NetSpeedWidget.Services
         private TraceEventSession? _session;
         private readonly CancellationTokenSource _cancellationTokenSource = new();
         private Task? _monitoringTask;
+        private readonly NetworkStatsService _statsService;
+        private readonly Timer _saveTimer;
 
         public event EventHandler<Dictionary<int, NetworkUsageInfo>>? StatsUpdated;
 
         public NetworkMonitorService()
         {
+            _statsService = new NetworkStatsService();
+            _saveTimer = new Timer(_ => SaveStats(), null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
             StartMonitoring();
         }
 
@@ -160,10 +164,35 @@ namespace NetSpeedWidget.Services
             }
         }
 
+        private async void SaveStats()
+        {
+            try
+            {
+                var currentStats = new Dictionary<int, NetworkUsageInfo>();
+                foreach (var kvp in _processStats)
+                {
+                    currentStats[kvp.Key] = new NetworkUsageInfo
+                    {
+                        ProcessId = kvp.Key,
+                        ProcessName = kvp.Value.ProcessName,
+                        DownloadBytesPerSecond = kvp.Value.DownloadBytesPerSecond,
+                        UploadBytesPerSecond = kvp.Value.UploadBytesPerSecond
+                    };
+                }
+
+                await _statsService.SaveNetworkUsageAsync(currentStats);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving network stats: {ex.Message}");
+            }
+        }
+
         public void Dispose()
         {
             try
             {
+                _saveTimer.Dispose();
                 _cancellationTokenSource.Cancel();
                 _session?.Dispose();
                 _monitoringTask?.Wait();

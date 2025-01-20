@@ -21,6 +21,7 @@ namespace NetSpeedWidget.Views
         private NetworkUsageViewModel? _networkUsageViewModel;
         private NetworkUsageWindow? _networkUsageWindow;
         private SettingsWindow? _settingsWindow;
+        private NetworkStatsWindow? _networkStatsWindow;
 
         public MainWindow()
         {
@@ -51,6 +52,7 @@ namespace NetSpeedWidget.Views
                 // Create context menu
                 var contextMenu = new ContextMenuStrip();
                 contextMenu.Items.Add("Show", null, (s, e) => ShowMainWindow());
+                contextMenu.Items.Add("Network Stats", null, (s, e) => ShowNetworkStatsWindow());
                 contextMenu.Items.Add("Exit", null, (s, e) => _viewModel.ExitCommand.Execute(null));
                 _notifyIcon.ContextMenuStrip = contextMenu;
                 Debug.WriteLine("Context menu created");
@@ -109,6 +111,10 @@ namespace NetSpeedWidget.Views
             {
                 ShowNetworkUsageWindow();
             }
+            else if (e.ClickCount == 3)  // Triple click to show stats
+            {
+                ShowNetworkStatsWindow();
+            }
             else
             {
                 DragMove();
@@ -155,6 +161,37 @@ namespace NetSpeedWidget.Views
             }
         }
 
+        private void ShowNetworkStatsWindow()
+        {
+            try
+            {
+                // If window exists, just activate it
+                if (_networkStatsWindow != null)
+                {
+                    _networkStatsWindow.Activate();
+                    Debug.WriteLine("Existing NetworkStatsWindow activated");
+                    return;
+                }
+
+                _networkStatsWindow = new NetworkStatsWindow();
+                _networkStatsWindow.Owner = this;
+
+                // Clear the reference when the window is closed
+                _networkStatsWindow.Closed += (s, e) =>
+                {
+                    _networkStatsWindow = null;
+                    Debug.WriteLine("NetworkStatsWindow reference cleared");
+                };
+
+                _networkStatsWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error showing NetworkStatsWindow: {ex.Message}");
+                MessageBox.Show($"Error showing network stats window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -197,6 +234,16 @@ namespace NetSpeedWidget.Views
                 Debug.WriteLine($"Error showing SettingsWindow: {ex.Message}");
                 MessageBox.Show($"Error showing settings window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void StatsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowNetworkStatsWindow();
+        }
+
+        private void NetworkUsageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowNetworkUsageWindow();
         }
 
         protected override void OnSourceInitialized(EventArgs e)
