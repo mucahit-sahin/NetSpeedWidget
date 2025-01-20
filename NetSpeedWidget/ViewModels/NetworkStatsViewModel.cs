@@ -42,6 +42,12 @@ namespace NetSpeedWidget.ViewModels
         [ObservableProperty]
         private string[] _xLabels = Array.Empty<string>();
 
+        [ObservableProperty]
+        private string _totalDownload = "0 B";
+
+        [ObservableProperty]
+        private string _totalUpload = "0 B";
+
         private string _currentSortColumn = "Download";
         private bool _isAscending = false;
 
@@ -145,6 +151,12 @@ namespace NetSpeedWidget.ViewModels
 
                 _dispatcher.Invoke(() =>
                 {
+                    // Calculate total usage
+                    double totalDownloadBytes = stats.Sum(s => s.TotalDownloadBytes);
+                    double totalUploadBytes = stats.Sum(s => s.TotalUploadBytes);
+                    TotalDownload = FormatBytes(totalDownloadBytes);
+                    TotalUpload = FormatBytes(totalUploadBytes);
+
                     // Group data by hour/day/month based on selected period
                     var groupedStats = SelectedPeriod switch
                     {

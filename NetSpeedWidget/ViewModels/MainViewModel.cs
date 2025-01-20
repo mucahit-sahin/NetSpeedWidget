@@ -13,7 +13,10 @@ namespace NetSpeedWidget.ViewModels
     public partial class MainViewModel : ObservableObject
     {
         private readonly NetworkSpeedService _networkSpeedService = null!;
+        private readonly NetworkMonitorService _networkMonitorService = null!;
         private readonly DispatcherTimer _timer = null!;
+
+        public NetworkMonitorService NetworkMonitorService => _networkMonitorService;
 
         [ObservableProperty]
         private NetworkSpeed _networkSpeed = new();
@@ -30,6 +33,7 @@ namespace NetSpeedWidget.ViewModels
             {
                 Debug.WriteLine("Initializing MainViewModel");
                 _networkSpeedService = new NetworkSpeedService();
+                _networkMonitorService = new NetworkMonitorService();
                 _timer = new DispatcherTimer
                 {
                     Interval = TimeSpan.FromMilliseconds(1500)
@@ -115,6 +119,7 @@ namespace NetSpeedWidget.ViewModels
                 Debug.WriteLine("Shutting down application");
                 StopMonitoring();
                 _networkSpeedService.Dispose();
+                _networkMonitorService.Dispose();
                 Application.Current.Shutdown();
             }
             catch (Exception ex)

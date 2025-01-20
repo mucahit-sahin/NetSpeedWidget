@@ -133,10 +133,9 @@ namespace NetSpeedWidget.Views
                     return;
                 }
 
-                // Create NetworkUsageViewModel with a new NetworkMonitorService
-                var monitorService = new NetworkMonitorService();
-                _networkUsageViewModel = new NetworkUsageViewModel(monitorService);
-                Debug.WriteLine("Created new NetworkUsageViewModel with NetworkMonitorService");
+                // Use the existing NetworkMonitorService from MainViewModel
+                _networkUsageViewModel = new NetworkUsageViewModel(_viewModel.NetworkMonitorService);
+                Debug.WriteLine("Created new NetworkUsageViewModel with existing NetworkMonitorService");
 
                 _networkUsageWindow = new NetworkUsageWindow();
                 _networkUsageWindow.Owner = this;
@@ -147,7 +146,6 @@ namespace NetSpeedWidget.Views
                 _networkUsageWindow.Closed += (s, e) =>
                 {
                     _networkUsageWindow = null;
-                    _networkUsageViewModel?.Dispose();
                     _networkUsageViewModel = null;
                     Debug.WriteLine("NetworkUsageWindow reference and ViewModel cleared");
                 };
