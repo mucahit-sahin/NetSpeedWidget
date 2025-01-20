@@ -42,6 +42,9 @@ namespace NetSpeedWidget.ViewModels
         [ObservableProperty]
         private string[] _xLabels = Array.Empty<string>();
 
+        private string _currentSortColumn = "Download";
+        private bool _isAscending = false;
+
         public ObservableCollection<string> Periods { get; } = new()
         {
             "Daily",
@@ -84,6 +87,44 @@ namespace NetSpeedWidget.ViewModels
 
             UpdateStatsCommand.Execute(null);
         }
+
+        private System.Windows.Media.ImageSource? GetIconFromProcessName(string processName)
+        {
+            try
+            {
+                var processes = System.Diagnostics.Process.GetProcessesByName(processName);
+                if (processes.Length == 0) return null;
+
+                using var process = processes[0];
+                string? fileName = process.MainModule?.FileName;
+                if (string.IsNullOrEmpty(fileName)) return null;
+
+                using var icon = System.Drawing.Icon.ExtractAssociatedIcon(fileName);
+                if (icon == null) return null;
+
+                using var bitmap = icon.ToBitmap();
+                var handle = bitmap.GetHbitmap();
+                try
+                {
+                    return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                        handle,
+                        System.IntPtr.Zero,
+                        System.Windows.Int32Rect.Empty,
+                        System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                }
+                finally
+                {
+                    DeleteObject(handle);
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        private static extern bool DeleteObject(System.IntPtr hObject);
 
         [RelayCommand]
         private async Task UpdateStats()
@@ -182,7 +223,8 @@ namespace NetSpeedWidget.ViewModels
                         {
                             ProcessName = kvp.Key,
                             TotalDownload = FormatBytes(kvp.Value.TotalDownload),
-                            TotalUpload = FormatBytes(kvp.Value.TotalUpload)
+                            TotalUpload = FormatBytes(kvp.Value.TotalUpload),
+                            Icon = GetIconFromProcessName(kvp.Key)
                         })
                         .OrderByDescending(x => ParseBytes(x.TotalDownload)));
                 });
@@ -242,12 +284,43 @@ namespace NetSpeedWidget.ViewModels
         {
             UpdateStatsCommand.Execute(null);
         }
+
+        [RelayCommand]
+        private void Sort(string columnName)
+        {
+            if (_currentSortColumn == columnName)
+            {
+                _isAscending = !_isAscending;
+            }
+            else
+            {
+                _currentSortColumn = columnName;
+                _isAscending = false;
+            }
+
+            var sortedItems = _currentSortColumn switch
+            {
+                "ProcessName" => _isAscending
+                    ? ApplicationStats.OrderBy(x => x.ProcessName).AsEnumerable()
+                    : ApplicationStats.OrderByDescending(x => x.ProcessName).AsEnumerable(),
+                "Download" => _isAscending
+                    ? ApplicationStats.OrderBy(x => ParseBytes(x.TotalDownload)).AsEnumerable()
+                    : ApplicationStats.OrderByDescending(x => ParseBytes(x.TotalDownload)).AsEnumerable(),
+                "Upload" => _isAscending
+                    ? ApplicationStats.OrderBy(x => ParseBytes(x.TotalUpload)).AsEnumerable()
+                    : ApplicationStats.OrderByDescending(x => ParseBytes(x.TotalUpload)).AsEnumerable(),
+                _ => ApplicationStats.AsEnumerable()
+            };
+
+            ApplicationStats = new ObservableCollection<AppUsageStats>(sortedItems);
+        }
     }
 
     public class AppUsageStats
     {
-        public string ProcessName { get; set; }
-        public string TotalDownload { get; set; }
-        public string TotalUpload { get; set; }
+        public string ProcessName { get; set; } = string.Empty;
+        public string TotalDownload { get; set; } = string.Empty;
+        public string TotalUpload { get; set; } = string.Empty;
+        public System.Windows.Media.ImageSource? Icon { get; set; }
     }
 }

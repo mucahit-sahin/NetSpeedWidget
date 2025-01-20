@@ -310,6 +310,22 @@
                                 Margin="0,0,8,0"
                                 VerticalContentAlignment="Top"
                                 Padding="0,-2,0,0"/>
+                        <Button Click="MaximizeButton_Click"
+                                Width="20"
+                                Height="20"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Foreground="#E0E0E0"
+                                FontFamily="{StaticResource MainFont}"
+                                FontSize="12"
+                                Margin="0,0,8,0"
+                                Padding="0">
+                            <Path Data="M0,0 L8,0 L8,8 L0,8 Z"
+                                  Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                  StrokeThickness="1"
+                                  Width="8"
+                                  Height="8"/>
+                        </Button>
                         <Button Content="✕"
                                 Click="CloseButton_Click"
                                 Width="20"
@@ -434,39 +450,67 @@
                                     <ListView.View>
                                         <GridView>
                                             <GridView.ColumnHeaderContainerStyle>
-                                                <Style TargetType="GridViewColumnHeader">
+                                                <Style TargetType="{x:Type GridViewColumnHeader}">
                                                     <Setter Property="Background" Value="Transparent"/>
-                                                    <Setter Property="Foreground" Value="#808080"/>
-                                                    <Setter Property="FontFamily" Value="{StaticResource MainFont}"/>
+                                                    <Setter Property="Foreground" Value="#E0E0E0"/>
                                                     <Setter Property="FontSize" Value="12"/>
-                                                    <Setter Property="Padding" Value="10,8"/>
-                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                    <Setter Property="Padding" Value="8,4"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
                                                     <Setter Property="Template">
                                                         <Setter.Value>
-                                                            <ControlTemplate TargetType="GridViewColumnHeader">
+                                                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
                                                                 <Border Background="{TemplateBinding Background}"
-                                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                        BorderThickness="0"
                                                                         Padding="{TemplateBinding Padding}">
-                                                                    <TextBlock Text="{TemplateBinding Content}"
-                                                                             Foreground="{TemplateBinding Foreground}"
-                                                                             FontFamily="{TemplateBinding FontFamily}"
-                                                                             FontSize="{TemplateBinding FontSize}"/>
+                                                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
                                                                 </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="#505050"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
                                                             </ControlTemplate>
                                                         </Setter.Value>
                                                     </Setter>
                                                 </Style>
                                             </GridView.ColumnHeaderContainerStyle>
-                                            <GridViewColumn Header="Application" 
-                                                          DisplayMemberBinding="{Binding ProcessName}"
-                                                          Width="200"/>
-                                            <GridViewColumn Header="Download" 
-                                                          DisplayMemberBinding="{Binding TotalDownload}"
-                                                          Width="150"/>
-                                            <GridViewColumn Header="Upload" 
-                                                          DisplayMemberBinding="{Binding TotalUpload}"
-                                                          Width="150"/>
+                                            <GridViewColumn Width="200">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Image Source="{Binding Icon}" Width="16" Height="16" Margin="0,0,8,0"/>
+                                                            <TextBlock Text="{Binding ProcessName}"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                                <GridViewColumnHeader Command="{Binding DataContext.SortCommand, RelativeSource={RelativeSource AncestorType=ListView}}" 
+                                                            CommandParameter="ProcessName">
+                                                    Application
+                                                </GridViewColumnHeader>
+                                            </GridViewColumn>
+                                            <GridViewColumn Width="100">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding TotalDownload}" TextAlignment="Right"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                                <GridViewColumnHeader Command="{Binding DataContext.SortCommand, RelativeSource={RelativeSource AncestorType=ListView}}" 
+                                                            CommandParameter="Download">
+                                                    Download
+                                                </GridViewColumnHeader>
+                                            </GridViewColumn>
+                                            <GridViewColumn Width="100">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding TotalUpload}" TextAlignment="Right"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                                <GridViewColumnHeader Command="{Binding DataContext.SortCommand, RelativeSource={RelativeSource AncestorType=ListView}}" 
+                                                            CommandParameter="Upload">
+                                                    Upload
+                                                </GridViewColumnHeader>
+                                            </GridViewColumn>
                                         </GridView>
                                     </ListView.View>
                                     <ListView.ItemContainerStyle>
@@ -485,8 +529,11 @@
                                                                 BorderBrush="{TemplateBinding BorderBrush}"
                                                                 BorderThickness="{TemplateBinding BorderThickness}"
                                                                 Padding="{TemplateBinding Padding}"
-                                                                CornerRadius="4">
-                                                            <GridViewRowPresenter/>
+                                                                CornerRadius="4"
+                                                                SnapsToDevicePixels="True">
+                                                            <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                                         </Border>
                                                         <ControlTemplate.Triggers>
                                                             <Trigger Property="IsMouseOver" Value="True">
@@ -499,6 +546,7 @@
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
+                                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         </Style>
                                     </ListView.ItemContainerStyle>
                                     <ListView.Resources>
@@ -514,10 +562,10 @@
                                                                 <Grid>
                                                                     <Track x:Name="PART_Track" IsDirectionReversed="True">
                                                                         <Track.DecreaseRepeatButton>
-                                                                            <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Opacity="0"/>
+                                                                            <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}"/>
                                                                         </Track.DecreaseRepeatButton>
                                                                         <Track.IncreaseRepeatButton>
-                                                                            <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Opacity="0"/>
+                                                                            <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}"/>
                                                                         </Track.IncreaseRepeatButton>
                                                                         <Track.Thumb>
                                                                             <Thumb>
@@ -536,6 +584,27 @@
                                                     </Setter>
                                                 </Trigger>
                                             </Style.Triggers>
+                                        </Style>
+                                        <Style TargetType="ScrollViewer">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ScrollViewer">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <ScrollContentPresenter Grid.Column="0"/>
+                                                            <ScrollBar x:Name="PART_VerticalScrollBar"
+                                                                     Grid.Column="1"
+                                                                     Value="{TemplateBinding VerticalOffset}"
+                                                                     Maximum="{TemplateBinding ScrollableHeight}"
+                                                                     ViewportSize="{TemplateBinding ViewportHeight}"
+                                                                     Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                                        </Grid>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
                                         </Style>
                                     </ListView.Resources>
                                 </ListView>
